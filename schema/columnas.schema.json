@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joaquinzapatagarcia/teletipo-jzg/schema/columnas.schema.json",
+  "title": "Biblioteca TELETIPO JZG",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "proyecto",
+    "version",
+    "descripcion",
+    "nota_editorial",
+    "campos",
+    "total_columnas",
+    "entradas"
+  ],
+  "properties": {
+    "proyecto": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$" },
+    "descripcion": { "type": "string", "minLength": 1 },
+    "nota_editorial": { "type": "string", "minLength": 1 },
+    "campos": {
+      "type": "array",
+      "minItems": 15,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "total_columnas": { "type": "integer", "minimum": 1 },
+    "entradas": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/entrada" }
+    }
+  },
+  "$defs": {
+    "texto": { "type": "string", "minLength": 1 },
+    "entrada": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "titulo",
+        "tema_principal",
+        "temas_secundarios",
+        "fragmento",
+        "pensamiento_de_joaquin",
+        "por_que_importa",
+        "etiquetas",
+        "tono",
+        "mini_titular",
+        "preguntas_que_responde",
+        "uso_sugerido",
+        "fuente",
+        "orden_original",
+        "huella"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^col_[0-9]{3}_[a-z0-9-]+$" },
+        "titulo": { "$ref": "#/$defs/texto" },
+        "tema_principal": {
+          "enum": [
+            "Arte y creación",
+            "Ciudad y sociedad",
+            "Criterio vital",
+            "Familia y memoria",
+            "Futuro y tecnología",
+            "Inteligencia artificial",
+            "Mercado y valor",
+            "Política y poder"
+          ]
+        },
+        "temas_secundarios": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/texto" }
+        },
+        "fragmento": { "$ref": "#/$defs/texto" },
+        "pensamiento_de_joaquin": { "$ref": "#/$defs/texto" },
+        "por_que_importa": { "$ref": "#/$defs/texto" },
+        "etiquetas": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/texto" }
+        },
+        "tono": { "enum": ["cultural", "ensayístico", "estratégico", "íntimo", "irónico"] },
+        "mini_titular": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "preguntas_que_responde": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/texto" }
+        },
+        "uso_sugerido": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["teletipo", "buscador", "idea_aleatoria"] }
+        },
+        "fuente": { "$ref": "#/$defs/texto" },
+        "orden_original": { "type": "integer", "minimum": 1 },
+        "huella": { "type": "string", "pattern": "^[a-f0-9]{12}$" }
+      }
+    }
+  }
+}
