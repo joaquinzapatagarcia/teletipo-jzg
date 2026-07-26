@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TELETIPO JZG: archivo vivo y museo digital de las columnas de Joaquín Zapata en La Razón.">
+  <meta name="theme-color" content="#f3efe7">
+  <title>TELETIPO JZG — Archivo de Joaquín Zapata</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Franklin:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#archivo">Saltar al archivo</a>
+
+  <header class="masthead">
+    <div class="masthead__line">
+      <span>PALMA · ESPAÑA</span>
+      <span id="fecha-hoy">ARCHIVO EN LÍNEA</span>
+      <span>EDICIÓN PERMANENTE</span>
+    </div>
+    <div class="brand-row">
+      <a class="brand" href="#inicio" aria-label="TELETIPO JZG, inicio">
+        <span class="brand__signal" aria-hidden="true"></span>
+        <span>TELETIPO JZG</span>
+      </a>
+      <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-principal">ÍNDICE</button>
+      <nav id="nav-principal" class="nav" aria-label="Navegación principal">
+        <a href="#pieza">Pieza del día</a>
+        <a href="#archivo">Archivo</a>
+        <a href="#autor">Autor</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="ticker" aria-label="Teletipo de titulares">
+      <div class="ticker__label">AHORA</div>
+      <div class="ticker__viewport">
+        <div id="ticker-track" class="ticker__track">CARGANDO ARCHIVO · CARGANDO ARCHIVO ·</div>
+      </div>
+    </section>
+
+    <section class="hero shell">
+      <div class="hero__eyebrow">ARCHIVO EDITORIAL · LA RAZÓN</div>
+      <h1>Las columnas pasan.<br>La mirada permanece.</h1>
+      <p class="hero__dek">Un museo digital de las ideas, ironías, escenas y preguntas publicadas por Joaquín Zapata. Ciento cuarenta y siete piezas para leer el presente sin rendirse a su ruido.</p>
+      <div class="hero__actions">
+        <a class="button button--dark" href="#archivo">Entrar al archivo</a>
+        <button id="azar-hero" class="button button--ghost" type="button">Abrir una pieza al azar</button>
+      </div>
+      <dl class="hero__stats">
+        <div><dt id="stat-columnas">147</dt><dd>columnas</dd></div>
+        <div><dt id="stat-temas">8</dt><dd>territorios</dd></div>
+        <div><dt>1</dt><dd>mirada propia</dd></div>
+      </dl>
+    </section>
+
+    <section id="pieza" class="feature shell section-rule" aria-labelledby="pieza-title">
+      <div class="section-heading">
+        <div><span class="kicker">PIEZA DEL DÍA</span><h2 id="pieza-title">Una columna vuelve a emitir</h2></div>
+        <button id="otra-pieza" class="text-button" type="button">Otra pieza ↗</button>
+      </div>
+      <article id="pieza-destacada" class="feature-card" aria-live="polite">
+        <div class="feature-card__meta">SELECCIÓN DEL ARCHIVO</div>
+        <h3>Cargando selección…</h3>
+        <blockquote>El archivo está abriendo sus cajones.</blockquote>
+      </article>
+    </section>
+
+    <section id="archivo" class="archive shell section-rule" aria-labelledby="archivo-title">
+      <div class="section-heading archive-heading">
+        <div><span class="kicker">SALA PRINCIPAL</span><h2 id="archivo-title">Archivo de columnas</h2></div>
+        <p id="contador-resultados" class="result-count">Preparando fichas…</p>
+      </div>
+
+      <div class="archive-tools">
+        <label class="search-box">
+          <span>BUSCAR</span>
+          <input id="buscador" type="search" placeholder="Una palabra, un tema, una obsesión…" autocomplete="off">
+        </label>
+        <div id="filtros" class="filters" aria-label="Filtrar por territorio editorial"></div>
+      </div>
+
+      <div id="grid-columnas" class="column-grid" aria-live="polite"></div>
+      <button id="cargar-mas" class="load-more" type="button">Mostrar más piezas</button>
+    </section>
+
+    <section id="autor" class="author shell section-rule">
+      <div class="author__label"><span class="kicker">EL AUTOR</span></div>
+      <div class="author__copy">
+        <h2>Joaquín Zapata</h2>
+        <p>Columnista, creador y observador de las relaciones entre cultura, tecnología, mercado, familia y poder. Este archivo no busca congelar sus columnas: las pone de nuevo en circulación.</p>
+        <p class="author__note">Publicado originalmente en <em>La Razón</em>. Selección y archivo editorial del autor.</p>
+      </div>
+      <div class="author__mark" aria-hidden="true">JZ</div>
+    </section>
+  </main>
+
+  <dialog id="lector" class="reader">
+    <button id="cerrar-lector" class="reader__close" type="button" aria-label="Cerrar lectura">×</button>
+    <div class="reader__meta" id="lector-meta"></div>
+    <h2 id="lector-titulo"></h2>
+    <blockquote id="lector-fragmento"></blockquote>
+    <p id="lector-pensamiento" class="reader__thought"></p>
+    <p id="lector-importancia"></p>
+    <div id="lector-etiquetas" class="reader__tags"></div>
+    <p class="reader__rights">Fragmento de una columna de Joaquín Zapata publicada en <em>La Razón</em>. Todos los derechos reservados.</p>
+  </dialog>
+
+  <footer class="footer shell">
+    <div>TELETIPO JZG</div>
+    <div>ARCHIVO VIVO · <span id="footer-year"></span></div>
+    <div>JOAQUÍN ZAPATA</div>
+  </footer>
+</body>
+</html>
