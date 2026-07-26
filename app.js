@@ -101,12 +101,6 @@ function setFeatured(entry) {
   `;
 }
 
-function renderTicker() {
-  const selection = [...state.entries].sort(() => Math.random() - .5).slice(0, 12);
-  const line = selection.map(item => `${item.tema_principal.toUpperCase()} · ${item.titulo.toUpperCase()}`).join('  ◆  ');
-  $('#ticker-track').textContent = `${line}  ◆  ${line}  ◆  `;
-}
-
 function bindEvents() {
   $('#buscador').addEventListener('input', event => {
     state.query = event.target.value;
@@ -170,7 +164,6 @@ async function init() {
     $('#footer-year').textContent = new Date().getFullYear();
     $('#fecha-hoy').textContent = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
 
-    renderTicker();
     renderFilters();
     renderCards();
     setFeatured(state.entries[new Date().getDate() % state.entries.length]);
