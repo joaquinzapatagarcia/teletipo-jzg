@@ -7,6 +7,7 @@ const state = {
   featured: null,
 };
 
+const DECK_STORAGE_KEY = 'teletipo-jzg-featured-deck-v1';
 const $ = (selector) => document.querySelector(selector);
 const grid = $('#grid-columnas');
 const filters = $('#filtros');
@@ -24,6 +25,53 @@ function escapeHTML(value = '') {
 
 function getTopics(entries) {
   return [...new Set(entries.map(entry => entry.tema_principal))].sort((a, b) => a.localeCompare(b, 'es'));
+}
+
+function shuffle(values) {
+  const result = [...values];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [result[index], result[randomIndex]] = [result[randomIndex], result[index]];
+  }
+  return result;
+}
+
+function readDeck() {
+  try {
+    return JSON.parse(localStorage.getItem(DECK_STORAGE_KEY) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function createDeck(lastShownId = null) {
+  const ids = shuffle(state.entries.map(entry => entry.id));
+  if (ids.length > 1 && ids[0] === lastShownId) {
+    [ids[0], ids[1]] = [ids[1], ids[0]];
+  }
+  return {
+    signature: state.entries.map(entry => entry.id).join('|'),
+    remaining: ids,
+    lastShownId,
+  };
+}
+
+function nextDeckEntry() {
+  const signature = state.entries.map(entry => entry.id).join('|');
+  let deck = readDeck();
+
+  if (!deck || deck.signature !== signature || !Array.isArray(deck.remaining)) {
+    deck = createDeck(deck?.lastShownId || null);
+  }
+
+  if (deck.remaining.length === 0) {
+    deck = createDeck(deck.lastShownId || null);
+  }
+
+  const nextId = deck.remaining.shift();
+  deck.lastShownId = nextId;
+  localStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(deck));
+  return state.entries.find(entry => entry.id === nextId) || state.entries[0];
 }
 
 function renderFilters() {
@@ -85,20 +133,23 @@ function openReader(entry) {
   reader.showModal();
 }
 
-function randomEntry(excludeId) {
-  const candidates = state.entries.filter(entry => entry.id !== excludeId);
-  return candidates[Math.floor(Math.random() * candidates.length)];
-}
-
 function setFeatured(entry) {
-  state.featured = entry || randomEntry();
+  state.featured = entry || nextDeckEntry();
   const panel = $('#pieza-destacada');
   panel.dataset.id = state.featured.id;
   panel.innerHTML = `
     <div class="feature-card__meta">COLUMNA ${String(state.featured.orden_original).padStart(3, '0')} · ${escapeHTML(state.featured.tema_principal.toUpperCase())}</div>
     <h3>${escapeHTML(state.featured.titulo)}</h3>
     <blockquote>“${escapeHTML(state.featured.fragmento)}”</blockquote>
+    <div class="feature-card__hint">PULSA PARA ABRIR LA FICHA COMPLETA ↗</div>
   `;
+}
+
+function renderTicker() {
+  const line = state.entries
+    .map(item => `${item.tema_principal.toUpperCase()} · ${item.titulo.toUpperCase()}`)
+    .join('  ◆  ');
+  $('#ticker-track').textContent = `${line}  ◆  ${line}  ◆  `;
 }
 
 function bindEvents() {
@@ -134,9 +185,15 @@ function bindEvents() {
     renderCards();
   });
 
-  $('#otra-pieza').addEventListener('click', () => setFeatured(randomEntry(state.featured?.id)));
+  $('#otra-pieza').addEventListener('click', () => setFeatured(nextDeckEntry()));
   $('#pieza-destacada').addEventListener('click', () => openReader(state.featured));
-  $('#azar-hero').addEventListener('click', () => openReader(randomEntry()));
+  $('#pieza-destacada').addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openReader(state.featured);
+    }
+  });
+  $('#azar-hero').addEventListener('click', () => openReader(nextDeckEntry()));
   $('#cerrar-lector').addEventListener('click', () => reader.close());
   reader.addEventListener('click', event => {
     const bounds = reader.getBoundingClientRect();
@@ -164,9 +221,10 @@ async function init() {
     $('#footer-year').textContent = new Date().getFullYear();
     $('#fecha-hoy').textContent = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
 
+    renderTicker();
     renderFilters();
     renderCards();
-    setFeatured(state.entries[new Date().getDate() % state.entries.length]);
+    setFeatured(nextDeckEntry());
     bindEvents();
   } catch (error) {
     console.error(error);
