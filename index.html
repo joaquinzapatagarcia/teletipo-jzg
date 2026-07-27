@@ -36,9 +36,16 @@
   </header>
 
   <main id="inicio">
+    <section class="ticker" aria-label="Teletipo lento de titulares">
+      <div class="ticker__label">ARCHIVO</div>
+      <div class="ticker__viewport">
+        <div id="ticker-track" class="ticker__track">CARGANDO MEMORIA · CARGANDO MEMORIA ·</div>
+      </div>
+    </section>
+
     <section class="hero shell">
       <div class="hero__eyebrow">ARCHIVO EDITORIAL · LA RAZÓN</div>
-      <h1>Las columnas pasan.<br>La mirada permanece.</h1>
+      <h1>Las semanas pasan.<br>La mirada permanece.</h1>
       <p class="hero__dek">Un museo digital de las ideas, ironías, escenas y preguntas publicadas por Joaquín Zapata. Ciento cuarenta y siete piezas para leer el presente sin rendirse a su ruido.</p>
       <div class="hero__actions">
         <a class="button button--dark" href="#archivo">Entrar al archivo</a>
@@ -53,13 +60,14 @@
 
     <section id="pieza" class="feature shell section-rule" aria-labelledby="pieza-title">
       <div class="section-heading">
-        <div><span class="kicker">PIEZA DEL DÍA</span><h2 id="pieza-title">Una columna vuelve a emitir</h2></div>
+        <div><span class="kicker">PIEZA DEL DÍA</span><h2 id="pieza-title">Archivo de pensamientos…</h2></div>
         <button id="otra-pieza" class="text-button" type="button">Otra pieza ↗</button>
       </div>
-      <article id="pieza-destacada" class="feature-card" aria-live="polite">
+      <article id="pieza-destacada" class="feature-card" tabindex="0" role="button" aria-label="Abrir información adicional de la pieza del día" aria-live="polite">
         <div class="feature-card__meta">SELECCIÓN DEL ARCHIVO</div>
         <h3>Cargando selección…</h3>
         <blockquote>El archivo está abriendo sus cajones.</blockquote>
+        <div class="feature-card__hint">PULSA PARA ABRIR LA FICHA COMPLETA ↗</div>
       </article>
     </section>
 
